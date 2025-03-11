@@ -1,5 +1,12 @@
 // Basic functionality for the game interface
 document.addEventListener("DOMContentLoaded", function () {
+  screen.orientation.addEventListener("change", function () {
+    if (screen.orientation.angle === 0 || screen.orientation.angle === 180) {
+      alert(
+        "Please rotate your device to landscape mode for the best experience."
+      );
+    }
+  });
   // Spin wheel animation
   const spinWheel = document.querySelector(".spin-wheel");
   let isSpinning = false;
@@ -56,11 +63,3 @@ function exitFullScreen() {
     document.msExitFullscreen();
   }
 }
-
-window.addEventListener("orientationchange", function () {
-  if (window.orientation === 0 || window.orientation === 180) {
-    alert(
-      "Please rotate your device to landscape mode for the best experience."
-    );
-  }
-});
