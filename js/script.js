@@ -26,6 +26,8 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
+document.addEventListener("click", enterFullScreen);
+
 function enterFullScreen() {
   let elem = document.documentElement;
   if (elem.requestFullscreen) {
@@ -40,6 +42,9 @@ function enterFullScreen() {
     // IE/Edge
     elem.msRequestFullscreen();
   }
+
+  // Remove event listener after entering fullscreen to prevent repeated calls
+  document.removeEventListener("click", enterFullScreen);
 }
 
 function exitFullScreen() {
