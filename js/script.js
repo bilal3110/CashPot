@@ -1,4 +1,3 @@
-// Basic functionality for the game interface
 document.addEventListener("DOMContentLoaded", function () {
   // Spin wheel animation
   const spinWheel = document.querySelector(".spin-wheel");
@@ -9,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     isSpinning = true;
     const wheel = document.querySelector(".wheel-sections");
-    const randomDegrees = 1080 + Math.floor(Math.random() * 360); // At least 3 full spins + random
+    const randomDegrees = 1080 + Math.floor(Math.random() * 360); 
 
     wheel.style.transition =
       "transform 3s cubic-bezier(0.17, 0.67, 0.83, 0.67)";
@@ -26,51 +25,86 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-document.addEventListener("click", function enterFullScreen() {
+
+let isFullScreen = false;
+
+function enterFullScreen() {
   let elem = document.documentElement;
 
-  if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+  if (
+    !document.fullscreenElement &&
+    !document.webkitFullscreenElement &&
+    !document.mozFullScreenElement &&
+    !document.msFullscreenElement
+  ) {
+    isFullScreen = true;
+
     if (elem.requestFullscreen) {
       elem.requestFullscreen();
     } else if (elem.mozRequestFullScreen) {
-      elem.mozRequestFullScreen(); // Firefox
+      elem.mozRequestFullScreen(); 
     } else if (elem.webkitRequestFullscreen) {
-      elem.webkitRequestFullscreen(); // Safari, Chrome, Opera
+      elem.webkitRequestFullscreen(); 
     } else if (elem.msRequestFullscreen) {
-      elem.msRequestFullscreen(); // IE/Edge
+      elem.msRequestFullscreen(); 
     }
-    
-    // Remove event listener after fullscreen is activated
-    document.removeEventListener("click", enterFullScreen);
+  }
+}
+
+// Function to exit fullscreen
+function exitFullScreen() {
+  if (document.exitFullscreen) {
+    document.exitFullscreen();
+  } else if (document.mozCancelFullScreen) {
+    document.mozCancelFullScreen();
+  } else if (document.webkitExitFullscreen) {
+    document.webkitExitFullscreen();
+  } else if (document.msExitFullscreen) {
+    document.msExitFullscreen();
+  }
+
+  isFullScreen = false;
+}
+
+document.addEventListener("click", function (event) {
+  if (!isFullScreen) {
+    enterFullScreen();
+  } else {
+    exitFullScreen();
   }
 });
 
-
+document.addEventListener("fullscreenchange", function () {
+  isFullScreen = !!document.fullscreenElement;
+});
+document.addEventListener("webkitfullscreenchange", function () {
+  isFullScreen = !!document.webkitFullscreenElement;
+});
+document.addEventListener("mozfullscreenchange", function () {
+  isFullScreen = !!document.mozFullScreenElement;
+});
+document.addEventListener("MSFullscreenChange", function () {
+  isFullScreen = !!document.msFullscreenElement;
+});
 
 function exitFullScreen() {
   if (document.exitFullscreen) {
     document.exitFullscreen();
   } else if (document.mozCancelFullScreen) {
-    // Firefox
     document.mozCancelFullScreen();
   } else if (document.webkitExitFullscreen) {
-    // Chrome, Safari, Opera
     document.webkitExitFullscreen();
   } else if (document.msExitFullscreen) {
-    // IE/Edge
     document.msExitFullscreen();
   }
 }
 function checkOrientation() {
   if (screen.orientation.type.startsWith("portrait")) {
-    alert("Please rotate your device to landscape mode for the best experience.");
+    alert(
+      "Please rotate your device to landscape mode for the best experience."
+    );
   }
 }
 
-// Check on page load
 checkOrientation();
-
-// Listen for orientation changes
 screen.orientation.addEventListener("change", checkOrientation);
-
-
