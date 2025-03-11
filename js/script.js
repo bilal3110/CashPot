@@ -26,26 +26,29 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-document.addEventListener("click", enterFullScreen);
-
-function enterFullScreen() {
+document.addEventListener("click", function () {
   let elem = document.documentElement;
-  if (elem.requestFullscreen) {
-    elem.requestFullscreen();
-  } else if (elem.mozRequestFullScreen) {
-    // Firefox
-    elem.mozRequestFullScreen();
-  } else if (elem.webkitRequestFullscreen) {
-    // Chrome, Safari, Opera
-    elem.webkitRequestFullscreen();
-  } else if (elem.msRequestFullscreen) {
-    // IE/Edge
-    elem.msRequestFullscreen();
-  }
 
-  // Remove event listener after entering fullscreen to prevent repeated calls
-  document.removeEventListener("click", enterFullScreen);
-}
+  if (document.fullscreenElement || document.webkitFullscreenElement) {
+    // If already in fullscreen, exit fullscreen
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    }
+  } else {
+    // Enter fullscreen mode
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen();
+    } else if (elem.mozRequestFullScreen) {
+      elem.mozRequestFullScreen(); // Firefox
+    } else if (elem.webkitRequestFullscreen) {
+      elem.webkitRequestFullscreen(); // Safari, Chrome, Opera
+    } else if (elem.msRequestFullscreen) {
+      elem.msRequestFullscreen(); // IE/Edge
+    }
+  }
+});
 
 function exitFullScreen() {
   if (document.exitFullscreen) {
