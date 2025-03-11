@@ -462,12 +462,12 @@ body {
   }
 
   .game-card {
-    height: 180px;
+    height: 160px;
     width: 140px;
   }
 
   .game-card-caraosal {
-    height: 180px;
+    height: 160px;
     width: 140px;
   }
 
@@ -533,13 +533,13 @@ body {
   }
 
   .game-card {
-    height: 140px;
+    height: 120px;
     width: 70px;
   }
 
   .game-card-caraosal {
     display: none;
-    height: 140px;
+    height: 120px;
     width: 110px;
   }
 
