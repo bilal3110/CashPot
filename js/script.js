@@ -26,18 +26,10 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-document.addEventListener("click", function () {
+document.addEventListener("click", function enterFullScreen() {
   let elem = document.documentElement;
 
-  if (document.fullscreenElement || document.webkitFullscreenElement) {
-    // If already in fullscreen, exit fullscreen
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-    } else if (document.webkitExitFullscreen) {
-      document.webkitExitFullscreen();
-    }
-  } else {
-    // Enter fullscreen mode
+  if (!document.fullscreenElement && !document.webkitFullscreenElement) {
     if (elem.requestFullscreen) {
       elem.requestFullscreen();
     } else if (elem.mozRequestFullScreen) {
@@ -47,9 +39,13 @@ document.addEventListener("click", function () {
     } else if (elem.msRequestFullscreen) {
       elem.msRequestFullscreen(); // IE/Edge
     }
+    
+    // Remove event listener after fullscreen is activated
+    document.removeEventListener("click", enterFullScreen);
   }
-  document.removeEventListener("click", enterFullScreen);
 });
+
+
 
 function exitFullScreen() {
   if (document.exitFullscreen) {
