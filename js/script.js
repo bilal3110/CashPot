@@ -35,18 +35,39 @@ const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
 // Function to enter fullscreen
 function enterFullScreen() {
-  // If it's iOS, we need a different approach
+  // If it's iOS, we need to use a different approach
   if (isIOS) {
-    // iOS doesn't support true fullscreen API, so we'll use a workaround
-    // by maximizing viewport and scrolling to top
-    document.body.style.position = 'fixed';
-    document.body.style.width = '100%';
-    document.body.style.height = '100%';
-    document.body.style.top = '0';
-    document.body.style.left = '0';
-    document.body.style.right = '0';
-    document.body.style.bottom = '0';
+    // Using the viewport meta tag approach for iOS
+    const metaViewport = document.querySelector('meta[name=viewport]');
+    if (!metaViewport) {
+      // If there's no viewport meta tag, create one
+      const meta = document.createElement('meta');
+      meta.name = 'viewport';
+      meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+      document.getElementsByTagName('head')[0].appendChild(meta);
+    } else {
+      // Modify existing viewport meta tag
+      metaViewport.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+    }
+    
+    // Force to landscape if device supports it
+    if (window.screen && window.screen.orientation && window.screen.orientation.lock) {
+      window.screen.orientation.lock('landscape').catch(function() {
+        // Ignore if it fails
+      });
+    }
+    
+    // Hide any browser UI elements
+    if (document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen();
+    } else if (document.documentElement.webkitRequestFullscreen) {
+      document.documentElement.webkitRequestFullscreen();
+    }
+    
+    // Scroll to top and prevent scrolling
     window.scrollTo(0, 0);
+    document.body.style.overflow = 'hidden';
+    
     isFullScreen = true;
     return;
   }
@@ -77,13 +98,22 @@ function enterFullScreen() {
 function exitFullScreen() {
   // If it's iOS, revert our workaround
   if (isIOS) {
-    document.body.style.position = '';
-    document.body.style.width = '';
-    document.body.style.height = '';
-    document.body.style.top = '';
-    document.body.style.left = '';
-    document.body.style.right = '';
-    document.body.style.bottom = '';
+    // Restore viewport settings
+    const metaViewport = document.querySelector('meta[name=viewport]');
+    if (metaViewport) {
+      metaViewport.content = 'width=device-width, initial-scale=1.0';
+    }
+    
+    // Restore scrolling
+    document.body.style.overflow = '';
+    
+    // Try to exit fullscreen API (even though it's limited on iOS)
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    }
+    
     isFullScreen = false;
     return;
   }
@@ -102,49 +132,41 @@ function exitFullScreen() {
   isFullScreen = false;
 }
 
-// Document click handler for entering/exiting fullscreen
-document.addEventListener("click", function(event) {
-  // If not in fullscreen mode, any click will enter fullscreen
-  if (!isFullScreen) {
-    enterFullScreen();
-  }
-  // If in fullscreen, check if clicked on a button with onclick attribute
-  else if (isFullScreen) {
-    // Check if the clicked element is a button with an onclick attribute
-    let clickedElement = event.target.closest("button");
-    if (clickedElement && clickedElement.hasAttribute("onclick")) {
-      exitFullScreen();
+// Wait for the page to fully load before adding event listeners
+window.addEventListener('load', function() {
+  // Document click handler for entering/exiting fullscreen
+  document.addEventListener("click", function(event) {
+    // If not in fullscreen mode, any click will enter fullscreen
+    if (!isFullScreen) {
+      enterFullScreen();
     }
+    // If in fullscreen, check if clicked on a button with onclick attribute
+    else if (isFullScreen) {
+      // Check if the clicked element is a button with an onclick attribute
+      let clickedElement = event.target.closest("button");
+      if (clickedElement && clickedElement.hasAttribute("onclick")) {
+        exitFullScreen();
+      }
+    }
+  });
+  
+  // Listen for fullscreen change events to update our tracking variable (for non-iOS)
+  if (!isIOS) {
+    document.addEventListener("fullscreenchange", function() {
+      isFullScreen = !!document.fullscreenElement;
+    });
+    document.addEventListener("webkitfullscreenchange", function() {
+      isFullScreen = !!document.webkitFullscreenElement;
+    });
+    document.addEventListener("mozfullscreenchange", function() {
+      isFullScreen = !!document.mozFullScreenElement;
+    });
+    document.addEventListener("MSFullscreenChange", function() {
+      isFullScreen = !!document.msFullscreenElement;
+    });
   }
 });
 
-// Listen for fullscreen change events to update our tracking variable (for non-iOS)
-if (!isIOS) {
-  document.addEventListener("fullscreenchange", function() {
-    isFullScreen = !!document.fullscreenElement;
-  });
-  document.addEventListener("webkitfullscreenchange", function() {
-    isFullScreen = !!document.webkitFullscreenElement;
-  });
-  document.addEventListener("mozfullscreenchange", function() {
-    isFullScreen = !!document.mozFullScreenElement;
-  });
-  document.addEventListener("MSFullscreenChange", function() {
-    isFullScreen = !!document.msFullscreenElement;
-  });
-}
-
-// function exitFullScreen() {
-//   if (document.exitFullscreen) {
-//     document.exitFullscreen();
-//   } else if (document.mozCancelFullScreen) {
-//     document.mozCancelFullScreen();
-//   } else if (document.webkitExitFullscreen) {
-//     document.webkitExitFullscreen();
-//   } else if (document.msExitFullscreen) {
-//     document.msExitFullscreen();
-//   }
-// }
 function checkOrientation() {
   if (screen.orientation.type.startsWith("portrait")) {
     alert(
