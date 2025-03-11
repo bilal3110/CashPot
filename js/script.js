@@ -57,14 +57,15 @@ function exitFullScreen() {
   }
 }
 function checkOrientation() {
-  if (screen.orientation.angle === 0 || screen.orientation.angle === 180) {
+  if (screen.orientation.type.startsWith("portrait")) {
     alert("Please rotate your device to landscape mode for the best experience.");
   }
 }
 
-// Check orientation when the page loads
+// Check on page load
 checkOrientation();
 
 // Listen for orientation changes
 screen.orientation.addEventListener("change", checkOrientation);
+
 
