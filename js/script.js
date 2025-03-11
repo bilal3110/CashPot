@@ -48,6 +48,7 @@ document.addEventListener("click", function () {
       elem.msRequestFullscreen(); // IE/Edge
     }
   }
+  document.removeEventListener("click", enterFullScreen);
 });
 
 function exitFullScreen() {
