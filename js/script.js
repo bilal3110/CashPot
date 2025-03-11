@@ -27,76 +27,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 //Full Screen
-// Store a variable to track if we're in fullscreen mode
-// Combined solution for all platforms including iOS
+// Universal fullscreen solution that works with your existing exit button
 document.addEventListener("DOMContentLoaded", function() {
-  // Store a variable to track if we're in fullscreen mode
+  // Track fullscreen state
   let isFullScreen = false;
   
-  // Check if device is iOS
+  // Detect iOS
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
   
-  // For iOS, add meta tags programmatically if they don't exist
-  if (isIOS) {
-    // Add apple-mobile-web-app-capable meta tag if it doesn't exist
-    if (!document.querySelector('meta[name="apple-mobile-web-app-capable"]')) {
-      const metaCapable = document.createElement('meta');
-      metaCapable.name = 'apple-mobile-web-app-capable';
-      metaCapable.content = 'yes';
-      document.head.appendChild(metaCapable);
-    }
+  // Function to enter fullscreen
+  window.enterFullScreen = function() {
+    // If already in fullscreen, do nothing
+    if (isFullScreen) return;
     
-    // Add apple-mobile-web-app-status-bar-style meta tag if it doesn't exist
-    if (!document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]')) {
-      const metaStatus = document.createElement('meta');
-      metaStatus.name = 'apple-mobile-web-app-status-bar-style';
-      metaStatus.content = 'black-translucent';
-      document.head.appendChild(metaStatus);
-    }
-    
-    // Check if running in standalone mode (added to home screen)
-    const isInStandaloneMode = window.navigator.standalone;
-    
-    // If not in standalone mode, show a banner with instructions
-    if (!isInStandaloneMode) {
-      // Create a banner to instruct iOS users on how to get fullscreen
-      const banner = document.createElement('div');
-      banner.style.position = 'fixed';
-      banner.style.bottom = '0';
-      banner.style.left = '0';
-      banner.style.width = '100%';
-      banner.style.padding = '10px';
-      banner.style.backgroundColor = 'rgba(0,0,0,0.8)';
-      banner.style.color = 'white';
-      banner.style.zIndex = '9999';
-      banner.style.textAlign = 'center';
-      banner.style.fontSize = '14px';
-      banner.innerHTML = `
-        <p>For fullscreen on iOS, add this page to your home screen:</p>
-        <p>Tap share icon → "Add to Home Screen" → Open from home screen</p>
-        <button id="close-banner" style="padding:5px;margin-top:5px;background:#fff;color:#000;border:none;border-radius:5px;">Dismiss</button>
-      `;
-      document.body.appendChild(banner);
-      
-      // Add click event to close the banner
-      document.getElementById('close-banner').addEventListener('click', function() {
-        banner.style.display = 'none';
-      });
-    }
-  }
-  
-  // Function to enter fullscreen (for non-iOS)
-  function enterFullScreen() {
-    if (isIOS) return; // Skip for iOS
-    
-    let elem = document.documentElement;
+    const elem = document.documentElement;
     
     if (!document.fullscreenElement && 
         !document.webkitFullscreenElement && 
         !document.mozFullScreenElement &&
         !document.msFullscreenElement) {
-      
-      isFullScreen = true;
       
       if (elem.requestFullscreen) {
         elem.requestFullscreen();
@@ -107,12 +56,16 @@ document.addEventListener("DOMContentLoaded", function() {
       } else if (elem.msRequestFullscreen) {
         elem.msRequestFullscreen();
       }
+      
+      isFullScreen = true;
     }
-  }
+  };
   
-  // Function to exit fullscreen (for non-iOS)
-  function exitFullScreen() {
-    if (isIOS) return; // Skip for iOS
+  // Function to exit fullscreen - making this a global function
+  // so it can be called from your button's onclick handler
+  window.exitFullScreen = function() {
+    // If not in fullscreen, do nothing
+    if (!isFullScreen) return;
     
     if (document.exitFullscreen) {
       document.exitFullscreen();
@@ -125,45 +78,64 @@ document.addEventListener("DOMContentLoaded", function() {
     }
     
     isFullScreen = false;
-  }
+  };
   
-  // Document click handler for entering fullscreen
-  document.addEventListener("click", function(event) {
-    // Skip if already in fullscreen or if it's iOS
-    if (isFullScreen || isIOS) return;
+  // Add click handler to the document for entering fullscreen
+  document.addEventListener('click', function(event) {
+    // Don't trigger on clicks to buttons
+    if (event.target.tagName === 'BUTTON') {
+      return;
+    }
     
-    // Enter fullscreen on click
-    enterFullScreen();
-  });
-  
-  // Special handler for buttons with onclick attribute
-  document.addEventListener("click", function(event) {
-    // Skip if not in fullscreen or if it's iOS
-    if (!isFullScreen || isIOS) return;
-    
-    // Check if the clicked element is a button
-    if (event.target.tagName === "BUTTON") {
-      // Exit fullscreen if it's a button with onclick
-      if (event.target.hasAttribute("onclick")) {
-        exitFullScreen();
-      }
+    // Only trigger fullscreen on click when not already in fullscreen
+    if (!isFullScreen) {
+      window.enterFullScreen();
     }
   });
   
-  // Listen for fullscreen change events (for non-iOS)
-  if (!isIOS) {
-    document.addEventListener("fullscreenchange", function() {
-      isFullScreen = !!document.fullscreenElement;
-    });
-    document.addEventListener("webkitfullscreenchange", function() {
-      isFullScreen = !!document.webkitFullscreenElement;
-    });
-    document.addEventListener("mozfullscreenchange", function() {
-      isFullScreen = !!document.mozFullScreenElement;
-    });
-    document.addEventListener("MSFullscreenChange", function() {
-      isFullScreen = !!document.msFullscreenElement;
-    });
+  // Listen for fullscreen change events to track state correctly
+  document.addEventListener("fullscreenchange", function() {
+    isFullScreen = !!document.fullscreenElement;
+  });
+  document.addEventListener("webkitfullscreenchange", function() {
+    isFullScreen = !!document.webkitFullscreenElement;
+  });
+  document.addEventListener("mozfullscreenchange", function() {
+    isFullScreen = !!document.mozFullScreenElement;
+  });
+  document.addEventListener("MSFullscreenChange", function() {
+    isFullScreen = !!document.msFullscreenElement;
+  });
+  
+  // Special handling for iOS
+  if (isIOS) {
+    // Create a small notification for iOS users
+    const iosNote = document.createElement('div');
+    iosNote.style.position = 'fixed';
+    iosNote.style.bottom = '10px';
+    iosNote.style.left = '10px';
+    iosNote.style.padding = '8px';
+    iosNote.style.backgroundColor = 'rgba(0,0,0,0.7)';
+    iosNote.style.color = 'white';
+    iosNote.style.borderRadius = '5px';
+    iosNote.style.fontSize = '12px';
+    iosNote.style.zIndex = '9999';
+    iosNote.innerHTML = 'iOS has limited fullscreen support. For best experience, add to home screen.';
+    iosNote.style.display = 'none'; 
+    document.body.appendChild(iosNote);
+    
+    // Show the note briefly when attempting fullscreen on iOS
+    window.enterFullScreen = function() {
+      iosNote.style.display = 'block';
+      setTimeout(function() {
+        iosNote.style.display = 'none';
+      }, 5000); 
+    };
+    
+    window.exitFullScreen = function() {
+      // Just hide the notification on iOS
+      iosNote.style.display = 'none';
+    };
   }
 });
 
