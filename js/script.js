@@ -46,9 +46,15 @@ document.addEventListener("DOMContentLoaded", function () {
     if (isFullScreen) return;
 
     if (isIOS) {
-      // iOS workaround: Fake fullscreen by forcing elements to take full screen
-      document.body.classList.add("ios-fullscreen");
-      document.documentElement.classList.add("ios-fullscreen");
+      function hideSafariUI() {
+        setTimeout(function() {
+          window.scrollTo(0, 1);
+        }, 100);
+      }
+      
+      window.addEventListener("load", hideSafariUI);
+      window.addEventListener("orientationchange", hideSafariUI);
+      window.addEventListener("touchstart", hideSafariUI);      
     } else {
       // Regular fullscreen for other browsers
       const elem = document.documentElement;
