@@ -35,7 +35,6 @@ document.addEventListener("DOMContentLoaded", function() {
   
   // Function to enter fullscreen
   window.enterFullScreen = function() {
-    // If already in fullscreen, do nothing
     if (isFullScreen) return;
     
     const elem = document.documentElement;
@@ -59,10 +58,8 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   };
   
-  // Function to exit fullscreen - making this a global function
-  // so it can be called from your button's onclick handler
+  // Function to exit fullscreen
   window.exitFullScreen = function() {
-    // If not in fullscreen, do nothing
     if (!isFullScreen) return;
     
     if (document.exitFullscreen) {
@@ -78,20 +75,18 @@ document.addEventListener("DOMContentLoaded", function() {
     isFullScreen = false;
   };
   
-  // Add click handler to the document for entering fullscreen
+  // Add click handler to enter fullscreen
   document.addEventListener('click', function(event) {
-    // Don't trigger on clicks to buttons
     if (event.target.tagName === 'BUTTON') {
       return;
     }
     
-    // Only trigger fullscreen on click when not already in fullscreen
     if (!isFullScreen) {
       window.enterFullScreen();
     }
   });
   
-  // Listen for fullscreen change events to track state correctly
+  // Listen for fullscreen changes
   document.addEventListener("fullscreenchange", function() {
     isFullScreen = !!document.fullscreenElement;
   });
@@ -122,7 +117,6 @@ document.addEventListener("DOMContentLoaded", function() {
     iosNote.style.display = 'none'; 
     document.body.appendChild(iosNote);
     
-    // Show the note briefly when attempting fullscreen on iOS
     window.enterFullScreen = function() {
       iosNote.style.display = 'block';
       setTimeout(function() {
@@ -131,11 +125,21 @@ document.addEventListener("DOMContentLoaded", function() {
     };
     
     window.exitFullScreen = function() {
-      // Just hide the notification on iOS
       iosNote.style.display = 'none';
     };
+
+    // Hide Safari toolbar when scrolling
+    function hideSafariToolbar() {
+      setTimeout(() => {
+        window.scrollTo(0, 1);
+      }, 300);
+    }
+
+    // Trigger hiding toolbar on scroll
+    document.addEventListener("scroll", hideSafariToolbar);
   }
-}); 
+});
+
 
 // Orientation check
 function checkOrientation() {
