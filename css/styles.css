@@ -9,14 +9,19 @@
   background: url("../images/bgvid.mp4") center/cover no-repeat;
 } */
 
-.bg-vid {
-  position: fixed; 
+.video-container {
+  position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh; /* Makes sure it fully covers the screen */
-  object-fit: cover; /* Ensures video covers entire space without distortion */
+  height: 100vh;
+  overflow: hidden;
   z-index: -1;
+}
+.bg-vid {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 
