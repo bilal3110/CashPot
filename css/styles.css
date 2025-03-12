@@ -5,9 +5,13 @@
   font-family: Arial, sans-serif;
 }
 
-/* body {
-  background: url("../images/bgvid.mp4") center/cover no-repeat;
-} */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
 
 .video-container {
   position: fixed;
@@ -17,13 +21,14 @@
   height: 100vh;
   overflow: hidden;
   z-index: -1;
+  background: black;
 }
+
 .bg-vid {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-
 
 .game-container {
   max-width: 100%;
