@@ -5,10 +5,20 @@
   font-family: Arial, sans-serif;
 }
 
-body {
-  background: url("../images/bg.png") center/cover no-repeat;
-  /* overflow: hidden; */
+/* body {
+  background: url("../images/bgvid.mp4") center/cover no-repeat;
+} */
+
+.bg-vid {
+  position: fixed; 
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh; /* Makes sure it fully covers the screen */
+  object-fit: cover; /* Ensures video covers entire space without distortion */
+  z-index: -1;
 }
+
 
 .game-container {
   max-width: 100%;
