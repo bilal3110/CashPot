@@ -42,66 +42,60 @@ document.addEventListener("DOMContentLoaded", function () {
   let isFullScreen = false;
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
-  // Function to enter fullscreen
   window.enterFullScreen = function () {
     if (isFullScreen) return;
-    const elem = document.documentElement;
 
-    if (elem.requestFullscreen) {
-      elem.requestFullscreen();
-    } else if (elem.mozRequestFullScreen) {
-      elem.mozRequestFullScreen();
-    } else if (elem.webkitRequestFullscreen) {
-      elem.webkitRequestFullscreen();
-    } else if (elem.msRequestFullscreen) {
-      elem.msRequestFullscreen();
+    if (isIOS) {
+      // iOS workaround: Fake fullscreen by forcing elements to take full screen
+      document.body.classList.add("ios-fullscreen");
+      document.documentElement.classList.add("ios-fullscreen");
+    } else {
+      // Regular fullscreen for other browsers
+      const elem = document.documentElement;
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+      } else if (elem.mozRequestFullScreen) {
+        elem.mozRequestFullScreen();
+      } else if (elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen();
+      } else if (elem.msRequestFullscreen) {
+        elem.msRequestFullscreen();
+      }
     }
+
     isFullScreen = true;
   };
 
-  // Function to exit fullscreen
   window.exitFullScreen = function () {
     if (!isFullScreen) return;
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-    } else if (document.mozCancelFullScreen) {
-      document.mozCancelFullScreen();
-    } else if (document.webkitExitFullscreen) {
-      document.webkitExitFullscreen();
-    } else if (document.msExitFullscreen) {
-      document.msExitFullscreen();
+
+    if (isIOS) {
+      // Remove fake fullscreen styling
+      document.body.classList.remove("ios-fullscreen");
+      document.documentElement.classList.remove("ios-fullscreen");
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+      }
     }
+
     isFullScreen = false;
   };
 
-  // Enable fullscreen on any touch/click
-  document.addEventListener("click", function () {
-    if (!isFullScreen) {
-      window.enterFullScreen();
-    }
-  });
-
-  // Track fullscreen state
-  document.addEventListener("fullscreenchange", function () {
-    isFullScreen = !!document.fullscreenElement;
-  });
-  document.addEventListener("webkitfullscreenchange", function () {
-    isFullScreen = !!document.webkitFullscreenElement;
-  });
-  document.addEventListener("mozfullscreenchange", function () {
-    isFullScreen = !!document.mozFullScreenElement;
-  });
-  document.addEventListener("MSFullscreenChange", function () {
-    isFullScreen = !!document.msFullscreenElement;
-  });
-
-  // Special handling for iOS to prevent fullscreen video
+  // iOS-specific fixes
   if (isIOS) {
-    const video = document.querySelector(".bg-vid");
+    const video = document.getElementById("bgVideo");
     video.setAttribute("playsinline", "true");
     video.setAttribute("webkit-playsinline", "true");
   }
 });
+
 
 function checkOrientation() {
   if (screen.orientation.type.startsWith("portrait")) {
