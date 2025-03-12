@@ -95,18 +95,13 @@ document.addEventListener("DOMContentLoaded", function () {
     isFullScreen = !!document.msFullscreenElement;
   });
 
-  // Special handling for iOS
+  // Special handling for iOS to prevent fullscreen video
   if (isIOS) {
-    document.addEventListener("click", function () {
-      const video = document.querySelector(".bg-vid");
-      if (video && typeof video.webkitEnterFullscreen === "function") {
-        video.webkitEnterFullscreen();
-      }
-    });
+    const video = document.querySelector(".bg-vid");
+    video.setAttribute("playsinline", "true");
+    video.setAttribute("webkit-playsinline", "true");
   }
 });
-
-
 
 function checkOrientation() {
   if (screen.orientation.type.startsWith("portrait")) {
