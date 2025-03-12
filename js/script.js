@@ -25,6 +25,17 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+  const video = document.querySelector(".bg-vid");
+
+  // Ensure video plays after user interaction
+  document.addEventListener("click", function () {
+    if (video.paused) {
+      video.play().catch(error => console.log("Autoplay blocked:", error));
+    }
+  });
+});
+
 
 //Full Screen
 document.addEventListener("DOMContentLoaded", function() {
