@@ -31,11 +31,20 @@
       href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
     />
     <link rel="stylesheet" href="css/styles.css" />
+    <link rel="icon" href="images/logo.png" type="image/x-icon" />
     <title>CASH POT Game Interface</title>
   </head>
   <body>
-    <div class="fullscreen-wrapper">
-      <video src="images/bgvid.mp4" class="bg-vid" autoplay muted loop playsinline ></video>
+    <div id="overlay">
+      <div id="overlay-logo">
+        <img src="images/logo.png" alt="">
+      </div>
+      <small>
+        Please rotate your device to landscape mode 📱
+      </small>
+    </div>
+    <!-- <div class="fullscreen-wrapper">
+      <video src="images/bgvid.mp4" class="bg-vid" autoplay muted loop playsinline ></video> -->
       <div class="game-container">      
         <!-- Header with profile and controls -->
         <div class="header">
@@ -483,7 +492,7 @@
             <!-- Betting -->
           </div>
         </div>
-    </div>
+    <!-- </div> -->
   </div>
     <!-- Bootstrap JavaScript Libraries -->
     <script src="js/script.js"></script>

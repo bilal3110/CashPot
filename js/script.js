@@ -33,15 +33,12 @@ document.addEventListener('touchstart', function() {
 });
 
 
-// Universal fullscreen solution that works with your existing exit button
+//Full Screen
 document.addEventListener("DOMContentLoaded", function() {
-  // Track fullscreen state
   let isFullScreen = false;
   
-  // Detect iOS
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
   
-  // Function to enter fullscreen
   window.enterFullScreen = function() {
     if (isFullScreen) return;
     
@@ -66,7 +63,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   };
   
-  // Function to exit fullscreen
   window.exitFullScreen = function() {
     if (!isFullScreen) return;
     
@@ -83,7 +79,6 @@ document.addEventListener("DOMContentLoaded", function() {
     isFullScreen = false;
   };
   
-  // Add click handler to enter fullscreen
   document.addEventListener('click', function(event) {
     if (event.target.tagName === 'BUTTON') {
       return;
@@ -94,7 +89,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   });
   
-  // Listen for fullscreen changes
   document.addEventListener("fullscreenchange", function() {
     isFullScreen = !!document.fullscreenElement;
   });
@@ -108,18 +102,16 @@ document.addEventListener("DOMContentLoaded", function() {
     isFullScreen = !!document.msFullscreenElement;
   });
   
-  // Special handling for iOS
   if (isIOS) {
-    // Create a small notification for iOS users
     const iosNote = document.createElement('div');
     iosNote.style.position = 'fixed';
     iosNote.style.bottom = '10px';
     iosNote.style.left = '10px';
-    iosNote.style.padding = '8px';
+    iosNote.style.padding = '10px';
     iosNote.style.backgroundColor = 'rgba(0,0,0,0.7)';
     iosNote.style.color = 'white';
     iosNote.style.borderRadius = '5px';
-    iosNote.style.fontSize = '12px';
+    iosNote.style.fontSize = '14px';
     iosNote.style.zIndex = '9999';
     iosNote.innerHTML = 'iOS has limited fullscreen support. For best experience, add to home screen.';
     iosNote.style.display = 'none'; 
@@ -150,13 +142,28 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 // Orientation check
+// function checkOrientation() {
+//   if (screen.orientation.type.startsWith("portrait")) {
+//     alert(
+//       "Please rotate your device to landscape mode for the best experience."
+//     );
+//   }
+// }
+
+// checkOrientation();
+// screen.orientation.addEventListener("change", checkOrientation);
+
 function checkOrientation() {
-  if (screen.orientation.type.startsWith("portrait")) {
-    alert(
-      "Please rotate your device to landscape mode for the best experience."
-    );
+  const overlay = document.getElementById("overlay");
+  if (window.innerHeight > window.innerWidth) {
+    overlay.style.display = "flex";
+  } else {
+    overlay.style.display = "none";
   }
 }
 
+// Check on page load
 checkOrientation();
-screen.orientation.addEventListener("change", checkOrientation);
+
+// Check on orientation change
+window.addEventListener("resize", checkOrientation);
