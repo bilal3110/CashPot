@@ -22,7 +22,7 @@ html, body {
   overflow: hidden;
 } */
 
-/* .fullscreen-wrapper {
+.fullscreen-wrapper {
   position: fixed;
   top: 0;
   left: 0;
@@ -43,10 +43,10 @@ html, body {
   height: 100vh;
   object-fit: cover;
   z-index: -1;
-} */
+}
 
 .game-container {
-  background: url('../images/bg.png') no-repeat center center/cover;
+  /* background: url('../images/bg.png') no-repeat center center/cover; */
   max-width: 100%;
   min-height: 100vh;
   display: flex;
