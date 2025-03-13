@@ -128,7 +128,6 @@ document.addEventListener("DOMContentLoaded", function() {
       iosNote.style.display = 'none';
     };
 
-    // Hide Safari toolbar when scrolling
     function hideSafariToolbar() {
       setTimeout(() => {
         window.scrollTo(0, 1);
@@ -161,9 +160,22 @@ function checkOrientation() {
     overlay.style.display = "none";
   }
 }
-
-// Check on page load
 checkOrientation();
 
-// Check on orientation change
 window.addEventListener("resize", checkOrientation);
+
+
+//Sound Toggle
+
+const soundToggle = document.getElementById("soundToggle");
+const audio = document.getElementById("audio");
+
+soundToggle.addEventListener("click", function() {
+  if (audio.paused) {
+    audio.play();
+    soundToggle.innerHTML = '<i class="fas fa-volume-up"></i>';
+  } else {
+    audio.pause();
+    soundToggle.innerHTML = '<i class="fas fa-volume-mute"></i>';
+  }
+});

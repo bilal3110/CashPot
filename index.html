@@ -30,11 +30,94 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
     />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="icon" href="images/logo.png" type="image/x-icon" />
     <title>CASH POT Game Interface</title>
   </head>
   <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">          
+          <!-- Modal Body -->
+          <div
+            class="modal fade"
+            id="modalId"
+            tabindex="-1"
+            data-bs-backdrop="static"
+            data-bs-keyboard="false"
+            
+            role="dialog"
+            aria-labelledby="modalTitleId"
+            aria-hidden="true"
+          >
+            <div
+              class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-md"
+              role="document"
+            >
+              <div class="modal-content p-3"
+              style="background-color: rgb(31, 29, 29);"
+              >
+                <div class="d-flex justify-content-between align-items-center">
+                  <!-- <h5 class="modal-title" id="modalTitleId">
+                    Modal title
+                  </h5> -->
+
+                  <button
+                    style="filter: invert(1) grayscale(100%) brightness(200%);"
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                  <span id="soundToggle">
+                    <i class="fas fa-volume-up"></i>
+                  </span>
+                </div>
+                <div class="modal-body">
+                  <div class="d-flex flex-column justify-content-center align-items-center gap-2">
+                    <div class="modal-logo">
+                      <img style="width: 200px;" src="images/logo.png" alt="">
+                    </div>
+                    <div class="modal-text d-flex flex-column justify-content-center align-items-center">
+                      <p style="
+                      color: #f5cc00;
+                      ">
+                        <strong>USER ID: </strong>987654
+                      </p>
+                      <p
+                      style="
+                      color: #f5cc00;
+                      "
+                      > 
+                        <strong>COINS: </strong>3000
+                      </p>
+                    </div>
+                    <div class="modal-btns d-flex justify-content-center align-items-center gap-2">
+                      <span>
+                        <a href="">Change Password</a>
+                      </span>
+                      <span>
+                        <a href="">Reset Password</a>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Optional: Place to the bottom of scripts -->
+          <script>
+            const myModal = new bootstrap.Modal(
+              document.getElementById("modalId"),
+              options,
+            );
+          </script>
+          
+        </div>
+      </div>
+    </div>
     <div id="overlay">
       <div id="overlay-logo">
         <img src="images/logo.png" alt="">
@@ -98,9 +181,12 @@
           <div class="logo">
             <img src="images/logo.png" alt="CASH POT" />
           </div>
-  
+
           <div class="controls">
-            <div class="control-button">
+            <div class="control-button" 
+            data-bs-toggle="modal"
+            data-bs-target="#modalId"
+            id="setting">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -175,7 +261,10 @@
             <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
             <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
           </svg>
-          Song xxxxxxxxxxxxxxxxxxxxxxxxx...
+          <audio id="audio" loop>
+            <source src="audio/audio.mp3" type="audio/mpeg"> 
+          </audio>
+          Music Game
         </div>
   
         <!-- Game cards -->

@@ -619,6 +619,31 @@ html, body {
   cursor: pointer;
 }
 
+.modal-btns span{
+  /* width: 28%; */
+  border-radius: 5px;
+  border: 2px solid #ff9900;
+  padding: 4px;
+}
+
+.modal-btns span a{
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 600;
+  color: #131313be;
+  background: radial-gradient(circle, #f5cc00 0%, #ff9900 100%);
+  border: none;
+  border-radius: 5px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+#soundToggle i{
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffffbe; 
+}
+
 @media (max-width: 990px) {
   .game-container {
     /* overflow: visible; */
