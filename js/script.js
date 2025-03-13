@@ -25,6 +25,14 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
+document.addEventListener('touchstart', function() {
+  var video = document.querySelector('video');
+  if (video) {
+    video.play();
+  }
+});
+
+
 // Universal fullscreen solution that works with your existing exit button
 document.addEventListener("DOMContentLoaded", function() {
   // Track fullscreen state
