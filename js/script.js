@@ -154,16 +154,19 @@ document.addEventListener("DOMContentLoaded", function() {
 
 function checkOrientation() {
   const overlay = document.getElementById("overlay");
-  if (window.innerHeight > window.innerWidth) {
+  const isPortrait = window.matchMedia("(orientation: portrait)").matches;
+
+  if (isPortrait) {
     overlay.style.display = "flex";
   } else {
     overlay.style.display = "none";
   }
 }
+
 checkOrientation();
 
 window.addEventListener("resize", checkOrientation);
-
+window.addEventListener("orientationchange", checkOrientation);
 
 //Sound Toggle
 
